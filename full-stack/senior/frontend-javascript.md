@@ -54,7 +54,16 @@ const people = [
 ```
 
 ```javascript
-// paste your code here
+function insertCatSpecies(people, petIds)
+{
+  return people.forEach(person => { 
+    person.pets.find((pet) => {
+      if (petIds.includes(pet.id)) {
+        pet.species = 'cat'
+      }
+    })
+  })
+}
 ```
 
 -------------------------
@@ -63,11 +72,15 @@ const people = [
 
 *Define NPM, Yarn and the difference between the two.*
 
+NPM and Yarn are both package managers that implement NPM's repository of packages. They are essentially two different implementations of the same thing. Yarn is, in my experience, a lot faster and less error-prone.
+
 -------------------------
 
 ### 3. Variable scope
 
 *What is the purpose of `let` keyword in javascript?*
+
+`let` is a more strict method of variable assignment. It is block-scoped rather than function-scoped and does not exist on the global object.
 
 -------------------------
 
@@ -75,6 +88,42 @@ const people = [
 
 *Explain the reasoning behind a stateless component along with a small code example. Use React or Vue.*
 
+In Vue, a stateless component is a component that does not invoke Vue's component lifecycle e.g. created(), mounted() or destroyed() and does not contain its own internal state. The benefit to this is reducing memory used by an application and making code more DRY/re-usable. 
+
+e.g. You could use a stateless component for common elements (like button, image) where you want to inherit a common set of markup+styles to the element, or a wrapper/parent element that contains slots for additional components (like an accordion).
+
 ```javascript
-// past your code here
+
+# Button.vue
+
+<template functional>
+  <div>
+    <a :href="props.href">{{ props.text }}</a>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'Button',
+    props: {
+      href: {
+        required: true,
+        type: String
+      },
+      text: {
+        required: true,
+        type: String
+      }
+    }
+  }
+</script>
+
+# app.vue
+
+<template>
+  <div>
+    <Button href="https://bing.com" text="Bing it" />
+  </div>
+</template>
+
 ```

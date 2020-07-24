@@ -25,7 +25,13 @@ class User
 ```
 
 ```php
-// paste your code here
+class User
+{
+    public static function getUsersByAge(int $age): ?Collection
+    {
+        return User::where('age', $age)->get() ?? null;
+    }
+}
 ```
 
 -------------------------
@@ -34,6 +40,8 @@ class User
 
 *What are the advantages of using Redis as the cache and queue drivers over the php array driver?*
 
+Speed and decoupling your cache/queue from the relational database. In my experience using redis vs database driver for chatbots, redis is much faster for processing concurrent queues.
+
 -------------------------
 
 
@@ -41,9 +49,28 @@ class User
 
 *Explain the differences between eager loading and lazy loading in eloquent models.*
 
+Eager loading queries a relationship that you know you will access up front and reduces it to two queries.
+
+e.g. 
+
+$users = User::all();
+$posts = Post::whereIn('id', $users->pluck('id'))->get();
+
+Lazy loading queries a relationship when it is accessed through a property and causes N+1 additional queries to the database.
+
+e.g.
+
+$users = User::all();
+
+foreach ($users as $user) {
+    Post::where('id', $user->id)->get();
+}
+
 -------------------------
 
 ### 4. Modern PHP
 
 *What is your favourite language feature introduced in PHP 7.4? Why do you like it? What advantages does it offer?*
+
+NULL-coalescing operator as its probably my most frequently used addition to the language and greatly reduces code length / improves code readability / Keeps code DRY
 
