@@ -53,8 +53,16 @@ Eager loading queries a relationship that you know you will access up front and 
 
 e.g. 
 
-$users = User::all();
-$posts = Post::whereIn('id', $users->pluck('id'))->get();
+$users = User::with('posts')->all();
+
+foreach ($users as $user) {
+    dump($user->posts);
+}
+
+The DB queries executed here would be:
+
+# SELECT * FROM users;
+# SELECT * FROM posts WHERE `posts.user_id` IN (1,2,3,4,5)
 
 Lazy loading queries a relationship when it is accessed through a property and causes N+1 additional queries to the database.
 
@@ -63,8 +71,15 @@ e.g.
 $users = User::all();
 
 foreach ($users as $user) {
-    Post::where('id', $user->id)->get();
+    dump($user->posts);
 }
+
+# SELECT * FROM users;
+# SELECT * FROM posts WHERE `posts.user_id` = 1;
+# SELECT * FROM posts WHERE `posts.user_id` = 2;
+# SELECT * FROM posts WHERE `posts.user_id` = 3;
+# SELECT * FROM posts WHERE `posts.user_id` = 4;
+# SELECT * FROM posts WHERE `posts.user_id` = 5;
 
 -------------------------
 
